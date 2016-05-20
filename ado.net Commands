@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
+using MySql.Data.Types;
+using System.Configuration;
+
+namespace ma
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            string connectionString = "Data Source=localhost;port=3306;Initial Catalog=world;user id=root;password=q888";  // providerName = "MySql.Data.MySqlClient";
+            string queryString = "SELECT code, Name FROM country;";
+
+            using (   MySqlConnection connection = new MySqlConnection(connectionString)  )
+            {
+                MySqlCommand command = new MySqlCommand(queryString, connection);
+                connection.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+                try
+                {
+                    while (reader.Read())
+                    {
+                        Console.WriteLine(String.Format("{0}, {1}",
+                            reader[0], reader[1]));
+                    }
+                }
+                finally
+                {
+                    // Always call Close when done reading.
+                    reader.Close();
+                }
+            }
+
+            Console.Read();
+        }
+    }
+}
